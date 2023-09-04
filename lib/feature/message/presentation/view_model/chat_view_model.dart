@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/feature/message/data/models/chat_model.dart';
 import 'package:dio/dio.dart';
-import 'package:uuid/uuid.dart';
 
 class ChatViewModel extends ChangeNotifier {
   final MessageRepo messageRepo;
@@ -15,102 +13,90 @@ class ChatViewModel extends ChangeNotifier {
   });
 
   final TextEditingController messageController = TextEditingController();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String? chatRoomId;
+  late String chatRoomId;
 
-  File? imageFile;
+  UserModel _messagePerson = UserModel();
 
-  void pickPictureFromGallery({
-    required String receiverToken,
-  }) async {
+  UserModel get messagePerson => _messagePerson;
+
+  void setMessagePerson(UserModel targetUser) {
+    _messagePerson = targetUser;
+  }
+
+  void setChatRoomId({required String user1, required String user2}) {
+    if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
+      chatRoomId = "$user1$user2";
+    } else {
+      chatRoomId = "$user2$user1";
+    }
+  }
+
+  void startMessage({required UserModel targetUser}) async {
+    setMessagePerson(targetUser);
+
+    setChatRoomId(user1: Fb().auth.currentUser!.uid, user2: targetUser.id!);
+
+    openNewChat();
+
+    getChatMessages();
+
+    Go.to.page(PageRoutes.chatPage);
+  }
+
+  void pickPictureFromGallery() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       uploadImage(
-        receiverToken: receiverToken,
         imageFile: File(pickedFile.path),
       );
-      print("Fotoğraf başarıyla seçildi, işlemler burada yapılır.");
-    } else {
-      print("Kullanıcı fotoğraf seçmeyi iptal etti veya bir hata oluştu.");
     }
   }
 
-  Future uploadImage({
-    required String receiverToken,
+  Future<void> uploadImage({
     required File? imageFile,
   }) async {
-    String fileName = Uuid().v1();
-    int status = 1;
+    var res = await messageRepo.sendImage(
+      receiverToken: _messagePerson.messageToken!,
+      chatRoomId: chatRoomId,
+      imageFile: imageFile,
+    );
 
-    var ref = FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
-
-    var uploadTask = await ref.putFile(imageFile!).catchError((error) async {
-      await _firestore.collection('chatroom').doc(chatRoomId).collection('chats').doc(fileName).delete();
-
-      status = 0;
-    });
-
-    if (status == 1) {
-      String imageUrl = await uploadTask.ref.getDownloadURL();
-
-      await _firestore.collection('chatroom').doc(chatRoomId).collection('chats').doc(fileName).set({
-        "sendby": _auth.currentUser!.uid,
-        "message": imageUrl,
-        "type": "img",
-        "time": DateTime.now(),
-      });
-
-      print(imageUrl);
-
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (imageUrl) {
       sendPushNotification(
         title: sl<LoginViewModel>().firestoreUser.name!,
         body: messageController.text,
-        receiverToken: receiverToken,
+        receiverToken: _messagePerson.messageToken!,
         image: imageUrl,
       );
-    }
+    });
   }
 
-  void onSendMessage({
-    required String receiverToken,
-  }) async {
+  Future<void> sendTextMessage() async {
     if (messageController.text.isNotEmpty) {
-      // changeScroolController();
-
-      Map<String, dynamic> messages = {
-        "sendby": _auth.currentUser!.uid,
-        "message": messageController.text,
-        "type": "text",
-        "time": DateTime.now(),
-      };
-
-      sendPushNotification(
-        title: sl<LoginViewModel>().firestoreUser.name!,
-        body: messageController.text,
-        receiverToken: receiverToken,
+      var res = await messageRepo.sendTextMessage(
+        message: messageController.text,
+        chatRoomId: chatRoomId,
+        receiverToken: "receiverToken",
       );
 
       messageController.clear();
-      await _firestore.collection('chatroom').doc(chatRoomId).collection('chats').add(messages);
-    } else {
-      print("Enter Some Text");
+
+      res.fold((failure) {
+        showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+      }, (data) {});
     }
   }
 
   ScrollController scroolController = ScrollController();
 
   void listenScroolController() {
-    // fetchNewMessage();
     scroolController.addListener(() {
-      // print(controller.position.pixels);
-
       if (scroolController.position.pixels == scroolController.position.maxScrollExtent) {
-        // page++;
-        print("*****************************************");
         getChatMessages();
       }
     });
@@ -146,7 +132,7 @@ class ChatViewModel extends ChangeNotifier {
     newMessageTime = null;
     isNewMessageServiceBegin = false;
 
-    scroolController.dispose(); // scroolController ı dispose ettik önceki verileri temizlendi. Şimdi tekrar çağrıcaz.
+    scroolController.dispose();
     scroolController = ScrollController();
 
     notifyListeners();
@@ -213,10 +199,9 @@ class ChatViewModel extends ChangeNotifier {
 
   //---------------------------------//
 
-  late Stream<QuerySnapshot> newMessageDocument;
-
   Stream<QuerySnapshot> newMessageQuery() {
-    newMessageDocument = FirebaseFirestore.instance
+    Stream<QuerySnapshot<Map<String, dynamic>>> newMessageDocument = Fb()
+        .firestore
         .collection('chatroom')
         .doc(chatRoomId)
         .collection('chats')
@@ -230,7 +215,7 @@ class ChatViewModel extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? isNewMessagesubscription;
 
   void fetchNewMessages() async {
-    isNewMessagesubscription = newMessageDocument.listen((event) {
+    isNewMessagesubscription = newMessageQuery().listen((event) {
       if (event.docs.isNotEmpty) {
         var getNewData = event.docs.first;
 

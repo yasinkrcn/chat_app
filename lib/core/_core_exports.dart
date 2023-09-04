@@ -53,3 +53,4 @@ export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/
 export 'package:chat_app/feature/auth/presentation/view_model/login_view_model.dart';
 export 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
 export 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';
+export 'package:chat_app/core/constants/firebase_instance.dart';

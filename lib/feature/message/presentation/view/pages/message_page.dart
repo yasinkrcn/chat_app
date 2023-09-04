@@ -1,5 +1,6 @@
 import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/feature/message/presentation/view/widgets/message_card_widget.dart';
+import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 
 import 'package:chat_app/feature/message/presentation/view_model/message_view_model.dart';
 
@@ -33,14 +34,11 @@ class MessagePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () async {
-                              // sl<MessageViewModel>().chatRoomId = messageViewModel.chatRoomId(
-                              //     user1: FirebaseAuth.instance.currentUser!.uid, user2: chatUserList[index].id!);
+                              //TODO:
 
-                              // sl<MessageViewModel>().openNewChat();
-
-                              // Go.to.page(PageRoutes.chatPage, arguments: chatUserList[index]);
-
-                              // sl<MessageViewModel>().getChatMessages();
+                              sl<ChatViewModel>().startMessage(
+                                targetUser: chatUserList[index],
+                              );
                             },
                             child: MessageCardWidget(
                               imageUrl: chatUserList[index].userImage!,

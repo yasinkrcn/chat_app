@@ -1,3 +1,4 @@
+import 'package:chat_app/core/constants/firebase_instance.dart';
 import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 import 'package:chat_app/feature/message/presentation/view_model/message_view_model.dart';
 import 'package:provider/single_child_widget.dart';

@@ -1,6 +1,8 @@
 import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/core/utils/ui_state.dart';
+import 'package:chat_app/feature/auth/data/models/user_model.dart';
 import 'package:chat_app/feature/message/domain/repositories/message_repo.dart';
+import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 
 class MessageViewModel extends ChangeNotifier {
   final MessageRepo messageRepo;
@@ -25,14 +27,6 @@ class MessageViewModel extends ChangeNotifier {
       chatUserList = UIState.success(data);
     });
     notifyListeners();
-  }
-
-  String chatRoomId({required String user1, required String user2}) {
-    if (user1[0].toLowerCase().codeUnits[0] > user2.toLowerCase().codeUnits[0]) {
-      return "$user1$user2";
-    } else {
-      return "$user2$user1";
-    }
   }
 
   TextEditingController searchText = TextEditingController();

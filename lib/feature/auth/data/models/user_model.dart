@@ -50,6 +50,6 @@ class UserModel {
         "name": name,
         "number": number,
         "email": email,
-        "messageToken": messageToken,
+        "messageToken": messageToken ?? "",
       };
 }

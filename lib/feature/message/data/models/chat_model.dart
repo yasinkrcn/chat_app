@@ -15,8 +15,6 @@ class ChatModel {
   final Timestamp? time;
   final String? type;
 
-  // factory ChatModel.fromJson(String str) => ChatModel.fromMap(json.decode(str));
-
   String toJson() => json.encode(toMap());
 
   factory ChatModel.fromSnapshot(DocumentSnapshot snapshot) => ChatModel(
@@ -32,10 +30,4 @@ class ChatModel {
         "time": time,
         "type": type,
       };
-
-  // DateTime convertTime(DocumentSnapshot snapshot) {
-  //   DateTime time = snapshot['time']?.toDate();
-
-  //   return time;
-  // }
 }

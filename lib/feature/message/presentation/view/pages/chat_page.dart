@@ -5,19 +5,16 @@ import 'package:chat_app/feature/message/presentation/view/widgets/send_button.d
 import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 
 class ChatPage extends StatelessWidget {
-  final UserModel userData;
   const ChatPage({
     super.key,
-    required this.userData,
   });
 
   @override
   Widget build(BuildContext context) {
-    ScreenSize.init(context);
     return Consumer(
       builder: (context, ChatViewModel messageViewModel, child) {
         return AppScaffold(
-          appBar: ChatPageAppBar(userData: userData),
+          appBar: ChatPageAppBar(userData: messageViewModel.messagePerson),
           body: Column(
             children: [
               Flexible(
@@ -53,11 +50,10 @@ class ChatPage extends StatelessWidget {
                       child: AppTextFormField.standart(
                         fillColor: Colors.white.withOpacity(.6),
                         hintText: "Send message...",
-                        // width: ScreenSize().getWidthPercent(1) - 200,
                         controller: messageViewModel.messageController,
                         suffixIcon: GestureDetector(
                             onTap: () {
-                              messageViewModel.pickPictureFromGallery(receiverToken: userData.messageToken!);
+                              messageViewModel.pickPictureFromGallery();
                             },
                             child: Icon(Icons.photo)),
                       ),
@@ -79,8 +75,7 @@ class ChatPage extends StatelessWidget {
                     //       color: AppColors.white,
                     //     )),
                     SendButtonWidget(
-                      onTap: () => messageViewModel.onSendMessage(receiverToken: userData.messageToken!),
-                      // onTap: () => employerChatViewModel.getChatStream(),
+                      onTap: () => messageViewModel.sendTextMessage(),
                     ),
                   ],
                 ),
