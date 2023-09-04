@@ -1,6 +1,5 @@
 import 'package:chat_app/core/_core_exports.dart';
-import 'package:chat_app/feature/auth/presentation/view/widgets/shadow_container.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
+import 'package:chat_app/feature/auth/presentation/view/widgets/user_register_photo.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -15,7 +14,7 @@ class RegisterPage extends StatelessWidget {
             SizedBox.shrink(),
             // Expanded(child: Lottie.asset(AssetPaths().auth)),
             ShadowContainer(
-              child: Consumer(builder: (context, RegisterViewModel registerController, child) {
+              child: Consumer(builder: (context, RegisterViewModel registerViewModel, child) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -34,52 +33,45 @@ class RegisterPage extends StatelessWidget {
                     const SizedBox(
                       height: 28,
                     ),
+                    UserRegistrationAddPhotoWidget(viewModel: registerViewModel, isUpdate: false),
+                    const SizedBox(
+                      height: 16,
+                    ),
                     AppTextFormField.standart(
                       hintText: 'Adınız',
-                      controller: registerController.nameController,
+                      controller: registerViewModel.nameController,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     AppTextFormField.standart(
-                      hintText: 'Soyadınız',
-                      controller: registerController.surnameController,
+                      hintText: 'Telefon Numaranız',
+                      controller: registerViewModel.phoneNumberController,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     AppTextFormField.standart(
                       hintText: 'E-posta adresiniz',
-                      controller: registerController.emailController,
+                      controller: registerViewModel.emailController,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     AppTextFormField.obscure(
                       hintText: 'Şifreniz',
-                      controller: registerController.passwordController,
+                      controller: registerViewModel.passwordController,
                     ),
                     const SizedBox(
                       height: 12,
                     ),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Text(
-                    //     'Kullanım Koşullarını okudum ve kabul ediyorum.',
-                    //     style: TextStyle(
-                    //         fontSize: 15,
-                    //         fontWeight: FontWeight.w500,
-                    //         color: Colors.grey.shade800),
-                    //   ),
-                    // ),
-
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Transform.scale(
                           scale: 1.3,
                           child: Checkbox(
-                            value: registerController.isAccept,
+                            value: registerViewModel.isAccept,
                             checkColor: Colors.green,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
@@ -87,7 +79,7 @@ class RegisterPage extends StatelessWidget {
                             fillColor: MaterialStateProperty.all(Colors.white),
                             activeColor: Colors.orange,
                             onChanged: (value) {
-                              registerController.isTermsAndConditionAccept(value!);
+                              registerViewModel.isTermsAndConditionAccept(value!);
                             },
                           ),
                         ),
@@ -102,7 +94,7 @@ class RegisterPage extends StatelessWidget {
                                       const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w500),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      registerController.privacyPolicy(context);
+                                      registerViewModel.privacyPolicy(context);
                                     },
                                   children: const <TextSpan>[
                                     TextSpan(
@@ -120,7 +112,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     AppButton.standart(
                         onTap: () {
-                          registerController.register();
+                          registerViewModel.register();
                         },
                         buttonText: 'Kayıt Ol'),
                     const SizedBox(

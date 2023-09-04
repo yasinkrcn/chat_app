@@ -6,7 +6,7 @@ class LoginViewModel extends ChangeNotifier {
   RemoveDataFromKey removeDataFromKey = sl<RemoveDataFromKey>();
   AuthRepository authRepository = sl<AuthRepository>();
 
-  final TextEditingController emailController = TextEditingController(text: "23yasin1999@gmail.com");
+  final TextEditingController emailController = TextEditingController(text: "itncudybpdsmvkc@pretreer.com");
   final TextEditingController passwordController = TextEditingController(text: "121212");
 
   UserModel userInfo = UserModel();
@@ -20,7 +20,7 @@ class LoginViewModel extends ChangeNotifier {
       }, (data) {
         userInfo = data;
 
-        sl<UserModel>().email = data.email;
+        // sl<UserModel>().email = data.email;
       });
     } catch (_) {}
   }

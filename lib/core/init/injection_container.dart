@@ -4,6 +4,10 @@ import 'package:chat_app/feature/auth/data/repositories/auth_repo_impl.dart';
 import 'package:chat_app/feature/auth/presentation/view_model/login_view_model.dart';
 import 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
 import 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';
+import 'package:chat_app/feature/message/data/datasources/message_remote_data_source.dart';
+import 'package:chat_app/feature/message/data/repositories/message_repo_impl.dart';
+import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
+import 'package:chat_app/feature/message/presentation/view_model/message_view_model.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:chat_app/core/_core_exports.dart';
@@ -51,12 +55,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RegisterViewModel());
   sl.registerLazySingleton(() => VerifyEmailViewModel());
 
-  // //* Task
+  // //* Message
 
-  // sl.registerLazySingleton(() => TaskRemoteDataSource());
+  sl.registerLazySingleton(() => MessageRemoteDataSource());
 
-  // sl.registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl(sl()));
+  sl.registerLazySingleton<MessageRepo>(() => MessageRepositoryImpl(sl()));
 
-  // sl.registerLazySingleton(() => AddTaskViewModel());
-  // sl.registerLazySingleton(() => FetchTaskViewModel());
+  sl.registerLazySingleton(() => MessageViewModel(messageRepo: sl()));
+  sl.registerLazySingleton(() => ChatViewModel(messageRepo: sl()));
 }

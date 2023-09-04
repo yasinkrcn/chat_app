@@ -24,9 +24,11 @@ export 'package:chat_app/core/utils/local_data_source/shared_preferences/data/re
 export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/repo/shared_preferences_repository.dart';
 export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/usecases/get_data_from_key.dart';
 export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/usecases/remove_data_from_key.dart';
-
+export 'package:chat_app/core/shared_widgets/app_widget_state_builder.dart';
+export 'package:chat_app/core/shared_widgets/common_app_bar.dart';
 export 'package:flutter/services.dart';
 export 'package:provider/provider.dart';
+export 'package:chat_app/feature/auth/data/models/user_model.dart';
 
 export 'package:chat_app/core/error/failures/failure.dart';
 export 'package:flutter/gestures.dart';
@@ -42,5 +44,12 @@ export 'package:chat_app/core/shared_widgets/app_sized_box.dart';
 export 'package:chat_app/core/shared_widgets/app_profile_image.dart';
 export 'package:flutter/foundation.dart';
 export 'package:chat_app/feature/auth/data/models/user_model.dart';
+export 'package:chat_app/feature/message/domain/repositories/message_repo.dart';
+export 'package:image_picker/image_picker.dart';
 export 'package:chat_app/feature/auth/data/datasources/auth_remote_data_source.dart';
 export 'package:chat_app/feature/auth/domain/repositories/auth_repo.dart';
+export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/entities/shared_preferences_key_params.dart';
+
+export 'package:chat_app/feature/auth/presentation/view_model/login_view_model.dart';
+export 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
+export 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';

@@ -1,8 +1,10 @@
+import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/forgot_password_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/login_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/register_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/splash_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/verify_email_page.dart';
+import 'package:chat_app/feature/message/presentation/view/pages/contact_details_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class PageRoutes {
@@ -13,6 +15,7 @@ class PageRoutes {
   static const String forgotPasswordPage = "/forgotPasswordPage";
   static const String homePage = "/homePage";
   static const String addTaskPage = "/addTaskPage";
+  static const String contactDetailsPage = "/contactDetailsPage";
 }
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +33,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case PageRoutes.forgotPasswordPage:
       return CupertinoPageRoute(builder: (_) => const ForgotPasswordPage());
+    case PageRoutes.contactDetailsPage:
+      final UserModel userModel = settings.arguments as UserModel;
+      return CupertinoPageRoute(
+          builder: (_) => ContactDetailsPage(
+                userData: userModel,
+              ));
     // case PageRoutes.homePage:
     //   return CupertinoPageRoute(builder: (_) => const HomePage());
 

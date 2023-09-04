@@ -1,17 +1,23 @@
 import 'dart:convert';
 
+import 'package:chat_app/core/_core_exports.dart';
+
 class UserModel {
   UserModel({
     this.id,
+    this.userImage,
     this.name,
-    this.surname,
+    this.number,
     this.email,
+    this.messageToken,
   });
 
   String? id;
+  String? userImage;
   String? name;
-  String? surname;
+  String? number;
   String? email;
+  String? messageToken;
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 
@@ -19,15 +25,31 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         id: json["id"],
+        userImage: json["userImage"],
         name: json["name"],
-        surname: json["surname"],
+        number: json["number"],
         email: json["email"],
+        messageToken: json["messageToken"],
       );
+
+  factory UserModel.fromFirestore(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    return UserModel(
+      id: data["id"],
+      userImage: data["userImage"],
+      name: data["name"],
+      number: data["number"],
+      email: data["email"],
+      messageToken: data["messageToken"],
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "id": id,
+        "userImage": userImage,
         "name": name,
-        "surname": surname,
+        "number": number,
         "email": email,
+        "messageToken": messageToken,
       };
 }

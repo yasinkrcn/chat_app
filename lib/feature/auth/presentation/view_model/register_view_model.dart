@@ -1,12 +1,8 @@
 import 'dart:async';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 import 'package:chat_app/core/_core_exports.dart';
-import 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/entities/shared_preferences_key_params.dart';
-import 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/usecases/remove_data_from_key.dart';
-import 'package:chat_app/feature/auth/data/repositories/auth_repo_impl.dart';
-import 'package:chat_app/feature/auth/domain/repositories/auth_repo.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterViewModel extends ChangeNotifier {
   SharedPreferences prefs = sl<SharedPreferences>();
@@ -15,11 +11,48 @@ class RegisterViewModel extends ChangeNotifier {
   AuthRepository authRepository = sl<AuthRepository>();
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController surnameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  File? imageFile;
+
+  UserModel userModel = UserModel();
+
+  Future getImage() async {
+    ImagePicker picker = ImagePicker();
+    await picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        notifyListeners();
+        // uploadImage(imageFile: imageFile);
+      }
+    });
+  }
+
+  void removeImage() async {
+    await imageFile?.delete();
+    imageFile = null;
+    notifyListeners();
+  }
+
+  Future<void> getImageUrlFromFirebase() async {
+    String fileName = const Uuid().v1();
+
+    var ref = FirebaseStorage.instance.ref().child('userImages').child("$fileName.jpg");
+
+    TaskSnapshot uploadTask = await ref.putFile(imageFile!);
+
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+
+    userModel.userImage = imageUrl;
+  }
+
   Future<void> register() async {
+    await getImageUrlFromFirebase();
+    // String? oneSignalToken = await OneSignalService().getUserTokenId();
+
     try {
       final data = await authRepository.createUserWithEmailAndPassword(
         email: emailController.text,
@@ -29,12 +62,11 @@ class RegisterViewModel extends ChangeNotifier {
       data.fold((failure) {
         showCustomMessenger(CustomMessengerState.ERROR, failure.message);
       }, (data) async {
-        final userModel = UserModel(
-          email: emailController.text,
-          name: nameController.text,
-          surname: surnameController.text,
-          id: data.user?.uid,
-        );
+        userModel.email = emailController.text;
+        userModel.name = nameController.text;
+        userModel.number = phoneNumberController.text;
+        userModel.id = data.user?.uid;
+
         try {
           final saveData = await authRepository.saveUserInfo(userModel: userModel);
 
@@ -51,7 +83,6 @@ class RegisterViewModel extends ChangeNotifier {
             // clearController();
 
             Go.to.page(PageRoutes.verifyEmailPage);
-            // showCustomMessenger(CustomMessengerState.SUCCESS, "Kullanıcı kayıt başarılı");
           });
         } catch (_) {}
       });
@@ -73,7 +104,7 @@ class RegisterViewModel extends ChangeNotifier {
 
   void clearController() {
     nameController.clear();
-    surnameController.clear();
+    phoneNumberController.clear();
     emailController.clear();
     passwordController.clear();
   }
