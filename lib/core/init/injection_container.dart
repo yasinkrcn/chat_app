@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat_app/feature/auth/data/repositories/auth_repo_impl.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/login_view_model.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';
+
 import 'package:chat_app/feature/message/data/datasources/message_remote_data_source.dart';
 import 'package:chat_app/feature/message/data/repositories/message_repo_impl.dart';
 import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';

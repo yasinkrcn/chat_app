@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import '../functions/show_custom_messenger.dart';
+import 'package:chat_app/core/_core_exports.dart';
 
 class CustomMessenger extends StatelessWidget {
   const CustomMessenger({Key? key, required this.state, required this.content}) : super(key: key);
@@ -57,12 +56,13 @@ class CustomMessenger extends StatelessWidget {
           right: 0,
           top: 0,
           child: GestureDetector(
-            onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            onTap: () =>
+                ScaffoldMessenger.of(GlobalContextKey.instance.globalKey.currentContext!).hideCurrentSnackBar(),
             child: Container(
                 decoration: BoxDecoration(
                     color: state.getColor(), shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2)),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(6.0),
                   child: Icon(
                     Icons.close,
                     color: Colors.white,

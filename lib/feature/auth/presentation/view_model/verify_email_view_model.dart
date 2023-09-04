@@ -47,7 +47,7 @@ class VerifyEmailViewModel extends RegisterViewModel {
 
       if (isEmailVerified) {
         timerDispose();
-        Go.to.pageAndRemoveUntil(PageRoutes.homePage);
+        Go.to.pageAndRemoveUntil(PageRoutes.messagePage);
         showCustomMessenger(CustomMessengerState.SUCCESS, "Hoşgeldiniz");
       }
     } catch (e) {

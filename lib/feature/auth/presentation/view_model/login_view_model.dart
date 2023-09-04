@@ -26,46 +26,29 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   Future<void> login() async {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      try {
-        final res = await authRepository.loginWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        res.fold((failure) {
-          showCustomMessenger(CustomMessengerState.ERROR, failure.message);
-        }, (data) async {
-          if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
-            await fetchUserInfo();
+    final res =
+        await authRepository.loginWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (data) async {
+      if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
+        await fetchUserInfo();
 
-            saveDataFromKey(
-              SharedPreferenceKeyWithValueParams(
-                key: SharedPreferencesKeys.CACHE_USER_INFO,
-                value: userInfo.toJson(),
-              ),
-            );
+        saveDataFromKey(
+          SharedPreferenceKeyWithValueParams(
+            key: SharedPreferencesKeys.CACHE_USER_INFO,
+            value: userInfo.toJson(),
+          ),
+        );
 
-            clearController();
+        clearController();
 
-            Go.to.pageAndRemoveUntil(PageRoutes.homePage);
-            showCustomMessenger(CustomMessengerState.SUCCESS, "Hoşgeldiniz");
-          } else {
-            Go.to.page(PageRoutes.verifyEmailPage);
-          }
-        });
-      } on FirebaseAuthException catch (e) {
-        switch (e.code) {
-          case "wrong-password":
-            return showCustomMessenger(CustomMessengerState.ERROR, "Şifreniz hatalıdır.");
-          case "email-already-in-use":
-            return showCustomMessenger(CustomMessengerState.ERROR, "Email adresi kullanılmaktadır");
-          case "invalid-email":
-            return showCustomMessenger(CustomMessengerState.ERROR, "Kayıtlı email adresi bulunamadı");
-
-          default:
-        }
+        Go.to.pageAndRemoveUntil(PageRoutes.messagePage);
+        showCustomMessenger(CustomMessengerState.SUCCESS, "Hoşgeldiniz");
+      } else {
+        Go.to.page(PageRoutes.verifyEmailPage);
       }
-    } else {
-      showCustomMessenger(CustomMessengerState.ERROR, "Gerekli alanları doldurunuz.");
-    }
+    });
   }
 
   void clearController() {

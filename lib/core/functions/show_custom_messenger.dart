@@ -72,7 +72,7 @@ void showCustomMessenger(CustomMessengerState messengerState, String content, {b
       dismissDirection: DismissDirection.horizontal,
       content: CustomMessenger(state: messengerState, content: content),
       behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 100),
+      duration: const Duration(seconds: 3),
       elevation: 0,
     ),
   );

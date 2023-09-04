@@ -5,6 +5,7 @@ import 'package:chat_app/feature/auth/presentation/view/pages/register_page.dart
 import 'package:chat_app/feature/auth/presentation/view/pages/splash_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/verify_email_page.dart';
 import 'package:chat_app/feature/message/presentation/view/pages/contact_details_page.dart';
+import 'package:chat_app/feature/message/presentation/view/pages/message_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class PageRoutes {
@@ -13,8 +14,8 @@ class PageRoutes {
   static const String registerPage = "/registerPage";
   static const String verifyEmailPage = "/verifyEmailPage";
   static const String forgotPasswordPage = "/forgotPasswordPage";
-  static const String homePage = "/homePage";
-  static const String addTaskPage = "/addTaskPage";
+  static const String messagePage = "/messagePage";
+
   static const String contactDetailsPage = "/contactDetailsPage";
 }
 
@@ -39,8 +40,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (_) => ContactDetailsPage(
                 userData: userModel,
               ));
-    // case PageRoutes.homePage:
-    //   return CupertinoPageRoute(builder: (_) => const HomePage());
+    case PageRoutes.messagePage:
+      return CupertinoPageRoute(builder: (_) => const MessagePage());
 
     // case PageRoutes.addTaskPage:
     //   return CupertinoPageRoute(builder: (_) => const AddTaskPage());

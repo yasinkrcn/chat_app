@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       const Duration(seconds: 0),
       () {
         if (FirebaseAuth.instance.currentUser != null) {
-          Go.to.page(PageRoutes.homePage);
+          Go.to.page(PageRoutes.messagePage);
         } else {
           Go.to.page(PageRoutes.loginPage);
         }

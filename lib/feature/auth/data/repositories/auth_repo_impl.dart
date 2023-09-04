@@ -1,3 +1,4 @@
+import 'package:chat_app/core/error/firebase_exceptions/firebase_exceptions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:chat_app/core/_core_exports.dart';
 
@@ -16,12 +17,13 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       return Right(user);
-    } catch (failure) {
+    } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
-        print(failure);
+        print(e.code);
       }
+      final failure = FirebaseExceptionManager.handleFirebaseException(e);
 
-      return Left(UserRegistrationFailure());
+      return Left(failure);
     }
   }
 
@@ -46,11 +48,13 @@ class AuthRepositoryImpl implements AuthRepository {
       final result = await remoteDataSource.loginWithEmailAndPassword(email: email, password: password);
 
       return Right(result);
-    } catch (failure) {
+    } on FirebaseAuthException catch (e) {
       if (kDebugMode) {
-        print(failure);
+        print(e.code);
       }
-      return Left(UserLoginFailure());
+      final failure = FirebaseExceptionManager.handleFirebaseException(e);
+
+      return Left(failure);
     }
   }
 
