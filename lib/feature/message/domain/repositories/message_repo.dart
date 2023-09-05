@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/feature/message/data/models/chat_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class MessageRepo {
@@ -15,6 +16,10 @@ abstract class MessageRepo {
   Future<Either<Failure, void>> sendTextMessage({
     required String message,
     required String chatRoomId,
-    required String receiverToken,
+  });
+
+  Future<Either<Failure, List<ChatModel>>> fetchMessages({
+    required String chatRoomId,
+    required Timestamp? lastMessageTime,
   });
 }

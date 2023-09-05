@@ -2,6 +2,7 @@ import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/core/constants/main_provider_list.dart';
 import 'package:chat_app/core/constants/theme/app_theme.dart';
 import 'package:chat_app/core/init/injection_container.dart' as locator;
+import 'package:chat_app/core/utils/firebase_messaging_service.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/login_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/splash_page.dart';
 
@@ -15,6 +16,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FirebaseMessagingService().initialize();
 
   await locator.init();
 

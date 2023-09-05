@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/feature/auth/data/models/dks/user_dks.dart';
 
 class UserModel {
   UserModel({
@@ -24,32 +25,32 @@ class UserModel {
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
-        id: json["id"],
-        userImage: json["userImage"],
-        name: json["name"],
-        number: json["number"],
-        email: json["email"],
-        messageToken: json["messageToken"],
+        id: json[UserDKS.id],
+        userImage: json[UserDKS.userImage],
+        name: json[UserDKS.name],
+        number: json[UserDKS.number],
+        email: json[UserDKS.email],
+        messageToken: json[UserDKS.messageToken],
       );
 
   factory UserModel.fromFirestore(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
     return UserModel(
-      id: data["id"],
-      userImage: data["userImage"],
-      name: data["name"],
-      number: data["number"],
-      email: data["email"],
-      messageToken: data["messageToken"],
+      id: data[UserDKS.id],
+      userImage: data[UserDKS.userImage],
+      name: data[UserDKS.name],
+      number: data[UserDKS.number],
+      email: data[UserDKS.email],
+      messageToken: data[UserDKS.messageToken],
     );
   }
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "userImage": userImage,
-        "name": name,
-        "number": number,
-        "email": email,
-        "messageToken": messageToken ?? "",
+        UserDKS.id: id,
+        UserDKS.userImage: userImage,
+        UserDKS.name: name,
+        UserDKS.number: number,
+        UserDKS.email: email,
+        UserDKS.messageToken: messageToken ?? "",
       };
 }

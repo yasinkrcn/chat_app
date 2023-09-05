@@ -20,9 +20,19 @@ class LoginViewModel extends ChangeNotifier {
       }, (data) {
         userInfo = data;
 
-        // sl<UserModel>().email = data.email;
+        checkFCMToken();
       });
     } catch (_) {}
+  }
+
+  Future<void> checkFCMToken() async {
+    String? token = await FirebaseMessagingService().getFCMToken();
+
+    if (token != null && userInfo.messageToken != token) {
+      userInfo.messageToken = token;
+
+      await authRepository.saveUserInfo(userModel: userInfo);
+    }
   }
 
   Future<void> login() async {
@@ -70,5 +80,14 @@ class LoginViewModel extends ChangeNotifier {
 
   bool isAnonym() {
     return FirebaseAuth.instance.currentUser == null;
+  }
+
+  Future<void> logOut() async {
+    var res = await authRepository.signOut();
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (data) {
+      showCustomMessenger(CustomMessengerState.SUCCESS, "Hesabınızdan çıkış yapıldı");
+    });
   }
 }

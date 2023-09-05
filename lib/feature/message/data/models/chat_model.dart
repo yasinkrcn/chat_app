@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_app/feature/message/data/models/dks/chat_dks.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatModel {
@@ -18,16 +19,16 @@ class ChatModel {
   String toJson() => json.encode(toMap());
 
   factory ChatModel.fromSnapshot(DocumentSnapshot snapshot) => ChatModel(
-        message: snapshot["message"],
-        sendby: snapshot["sendby"],
-        time: snapshot["time"],
-        type: snapshot["type"],
+        message: snapshot[ChatDKS.message],
+        sendby: snapshot[ChatDKS.sendby],
+        time: snapshot[ChatDKS.time],
+        type: snapshot[ChatDKS.type],
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "sendby": sendby,
-        "time": time,
-        "type": type,
+        ChatDKS.message: message,
+        ChatDKS.sendby: sendby,
+        ChatDKS.time: time,
+        ChatDKS.type: type,
       };
 }

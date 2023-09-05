@@ -67,12 +67,12 @@ class ChatViewModel extends ChangeNotifier {
     res.fold((failure) {
       showCustomMessenger(CustomMessengerState.ERROR, failure.message);
     }, (imageUrl) {
-      sendPushNotification(
-        title: sl<LoginViewModel>().firestoreUser.name!,
-        body: messageController.text,
-        receiverToken: _messagePerson.messageToken!,
-        image: imageUrl,
-      );
+      // sendPushNotification(
+      //   title: sl<LoginViewModel>().firestoreUser.name!,
+      //   body: messageController.text,
+      //   receiverToken: _messagePerson.messageToken!,
+      //   image: imageUrl,
+      // );
     });
   }
 
@@ -81,14 +81,17 @@ class ChatViewModel extends ChangeNotifier {
       var res = await messageRepo.sendTextMessage(
         message: messageController.text,
         chatRoomId: chatRoomId,
-        receiverToken: "receiverToken",
       );
-
-      messageController.clear();
 
       res.fold((failure) {
         showCustomMessenger(CustomMessengerState.ERROR, failure.message);
-      }, (data) {});
+      }, (data) {
+        sendFirebaseNotification(
+            senderName: _messagePerson.name!,
+            message: messageController.text,
+            receiverToken: _messagePerson.messageToken!);
+        messageController.clear();
+      });
     }
   }
 
@@ -102,8 +105,6 @@ class ChatViewModel extends ChangeNotifier {
     });
   }
 
-  late Future<QuerySnapshot<Map<String, dynamic>>> messageDocument;
-
   List<DocumentSnapshot> chatDocuments = [];
 
   bool isLoading = false;
@@ -111,23 +112,19 @@ class ChatViewModel extends ChangeNotifier {
   Timestamp? lastMessageTime;
   Timestamp? newMessageTime;
 
-  bool ilkVeri = false;
+  bool firstData = false;
   bool isNewMessageServiceBegin = false;
 
   List<ChatModel> messageData = [];
 
-  List<ChatModel> newMessageData = [];
-
-  int pagelimit = 15;
-
-  Timestamp? ilkMesajTime;
+  Timestamp? firstMessageTime;
 
   void openNewChat() {
     isNewMessagesubscription?.cancel();
     messageData.clear();
 
-    ilkVeri = false;
-    ilkMesajTime = null;
+    firstData = false;
+    firstMessageTime = null;
     lastMessageTime = null;
     newMessageTime = null;
     isNewMessageServiceBegin = false;
@@ -138,6 +135,32 @@ class ChatViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchMessages() async {
+    var res = await messageRepo.fetchMessages(chatRoomId: chatRoomId, lastMessageTime: lastMessageTime);
+
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (data) {
+      if (data.isNotEmpty) {
+        ChatModel getData = data[data.length - 1]; //Burada gelen son mesajın tarihini alıyoruz.
+        lastMessageTime = getData.time; //Daha eski mesajlara bakmak istediğimizde bu taihe göre sorgu atıyoruz.
+
+        if (!firstData) {
+          messageData = data;
+
+          firstMessageTime = messageData.first.time ?? Timestamp.now();
+
+          notifyListeners();
+        } else {
+          List<ChatModel> newMessageData = data;
+          messageData.addAll(newMessageData);
+
+          notifyListeners();
+        }
+      }
+    });
+  }
+
   Future<void> getChatMessages() async {
     if (!isNewMessageServiceBegin) {
       listenScroolController();
@@ -146,55 +169,10 @@ class ChatViewModel extends ChangeNotifier {
       isNewMessageServiceBegin = true;
     }
     if (lastMessageTime != null) {
-      ilkVeri = true;
+      firstData = true;
     }
-    messageDocument = FirebaseFirestore.instance
-        .collection('chatroom')
-        .doc(chatRoomId)
-        .collection('chats')
-        .orderBy("time", descending: true)
-        .limit(pagelimit)
-        .startAfter([
-      Timestamp(lastMessageTime?.seconds ?? Timestamp.now().seconds,
-          lastMessageTime?.nanoseconds ?? Timestamp.now().nanoseconds)
-    ]).get();
 
-    getOldMessages();
-  }
-
-  //---------------------------------//
-
-  void getOldMessages() {
-    messageDocument.then(
-      (value) {
-        if (value.docs.isNotEmpty) {
-          var getData = value.docs[value.docs.length - 1];
-          lastMessageTime = getData.get("time");
-
-          if (!ilkVeri) {
-            messageData = value.docs.map((document) {
-              return ChatModel.fromSnapshot(document);
-            }).toList();
-
-            ilkMesajTime = messageData.first.time ?? Timestamp.now();
-
-            print(messageData.length);
-
-            notifyListeners();
-          } else {
-            newMessageData = value.docs.map((document) {
-              return ChatModel.fromSnapshot(document);
-            }).toList();
-
-            messageData.addAll(newMessageData);
-
-            print(messageData.length);
-
-            notifyListeners();
-          }
-        }
-      },
-    );
+    fetchMessages();
   }
 
   //---------------------------------//
@@ -221,7 +199,7 @@ class ChatViewModel extends ChangeNotifier {
 
         newMessageTime = getNewData.get("time");
 
-        if (newMessageTime!.seconds > (ilkMesajTime?.seconds ?? 0)) {
+        if (newMessageTime!.seconds > (firstMessageTime?.seconds ?? 0)) {
           var newMessageData = event.docs.map((document) {
             return ChatModel.fromSnapshot(document);
           }).toList();
@@ -233,43 +211,59 @@ class ChatViewModel extends ChangeNotifier {
     });
   }
 
-  void sendPushNotification({
-    required String title,
-    String? body,
-    String? image,
+  void sendFirebaseNotification({
+    required String senderName,
+    required String message,
     required String receiverToken,
-  }) async {
-    const url = "https://onesignal.com/api/v1/notifications";
+  }) {
+    Map<String, String> data = {
+      "title": senderName,
+      "body": message,
+    };
 
-    /// kRestApiKey is your OneSignal REST API key
-    const restApiKey = "NjVjN2EwYzYtZjE1MS00YzBiLWI2Y2ItZmQxYTg2ZTNjM2Rh";
-    const oneSignalAppID = "370ec5f1-4889-427e-b1aa-e14a753b72ee";
-    final dio = Dio();
-    try {
-      final response = await dio.post(
-        url,
-        options: Options(
-          headers: <String, String>{
-            "Authorization": "Basic $restApiKey",
-            "Content-Type": "application/json",
-          },
-        ),
-        data: jsonEncode({
-          "app_id": oneSignalAppID,
-          "include_player_ids": [receiverToken],
-          "headings": {"en": title},
-          "contents": {"en": body == "" ? "." : body},
-          "large_icon": image,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print('Push notification sent successfully.');
-      } else {
-        print('Request failed with status: ${response.statusCode}.');
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    }
+    FirebaseMessaging.instance.sendMessage(
+      to: receiverToken,
+      data: data,
+    );
   }
+
+  // void sendPushNotification({
+  //   required String title,
+  //   String? body,
+  //   String? image,
+  //   required String receiverToken,
+  // }) async {
+  //   const url = "https://onesignal.com/api/v1/notifications";
+
+  //   /// kRestApiKey is your OneSignal REST API key
+  //   const restApiKey = "NjVjN2EwYzYtZjE1MS00YzBiLWI2Y2ItZmQxYTg2ZTNjM2Rh";
+  //   const oneSignalAppID = "370ec5f1-4889-427e-b1aa-e14a753b72ee";
+  //   final dio = Dio();
+  //   try {
+  //     final response = await dio.post(
+  //       url,
+  //       options: Options(
+  //         headers: <String, String>{
+  //           "Authorization": "Basic $restApiKey",
+  //           "Content-Type": "application/json",
+  //         },
+  //       ),
+  //       data: jsonEncode({
+  //         "app_id": oneSignalAppID,
+  //         "include_player_ids": [receiverToken],
+  //         "headings": {"en": title},
+  //         "contents": {"en": body == "" ? "." : body},
+  //         "large_icon": image,
+  //       }),
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       print('Push notification sent successfully.');
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}.');
+  //     }
+  //   } catch (e) {
+  //     print('Error occurred: $e');
+  //   }
+  // }
 }

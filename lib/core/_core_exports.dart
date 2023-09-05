@@ -54,3 +54,5 @@ export 'package:chat_app/feature/auth/presentation/view_model/login_view_model.d
 export 'package:chat_app/feature/auth/presentation/view_model/register_view_model.dart';
 export 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_model.dart';
 export 'package:chat_app/core/constants/firebase_instance.dart';
+export 'package:firebase_messaging/firebase_messaging.dart';
+export 'package:chat_app/core/utils/firebase_messaging_service.dart';

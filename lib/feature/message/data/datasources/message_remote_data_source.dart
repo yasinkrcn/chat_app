@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/feature/message/data/models/chat_model.dart';
 import 'package:uuid/uuid.dart';
 
 class MessageRemoteDataSource {
@@ -55,21 +56,31 @@ class MessageRemoteDataSource {
   Future<void> sendTextMessage({
     required String message,
     required String chatRoomId,
-    required String receiverToken,
   }) async {
-    Map<String, dynamic> messages = {
-      "sendby": Fb().auth.currentUser!.uid,
-      "message": message,
-      "type": "text",
-      "time": DateTime.now(),
-    };
+    ChatModel item = ChatModel(
+      message: message,
+      sendby: Fb().auth.currentUser!.uid,
+      type: "text",
+      time: Timestamp.now(),
+    );
 
-    // sendPushNotification(
-    //   title: sl<LoginViewModel>().firestoreUser.name!,
-    //   body: messageController.text,
-    //   receiverToken: receiverToken,
-    // );
+    await Fb().firestore.collection('chatroom').doc(chatRoomId).collection('chats').add(item.toMap());
+  }
 
-    await Fb().firestore.collection('chatroom').doc(chatRoomId).collection('chats').add(messages);
+  Future<List<ChatModel>> fetchMessages({required String chatRoomId, required Timestamp? lastMessageTime}) async {
+    final QuerySnapshot<Map<String, dynamic>> value = await FirebaseFirestore.instance
+        .collection('chatroom')
+        .doc(chatRoomId)
+        .collection('chats')
+        .orderBy("time", descending: true)
+        .limit(15)
+        .startAfter([
+      Timestamp(lastMessageTime?.seconds ?? Timestamp.now().seconds,
+          lastMessageTime?.nanoseconds ?? Timestamp.now().nanoseconds)
+    ]).get();
+
+    List<ChatModel> chatMessages = value.docs.map((doc) => ChatModel.fromSnapshot(doc)).toList();
+
+    return chatMessages;
   }
 }

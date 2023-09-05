@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:chat_app/core/_core_exports.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:uuid/uuid.dart';
 
 class RegisterViewModel extends ChangeNotifier {
@@ -12,7 +12,6 @@ class RegisterViewModel extends ChangeNotifier {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -51,7 +50,6 @@ class RegisterViewModel extends ChangeNotifier {
 
   Future<void> register() async {
     await getImageUrlFromFirebase();
-    // String? oneSignalToken = await OneSignalService().getUserTokenId();
 
     try {
       final data = await authRepository.createUserWithEmailAndPassword(
@@ -66,6 +64,7 @@ class RegisterViewModel extends ChangeNotifier {
         userModel.name = nameController.text;
         userModel.number = phoneNumberController.text;
         userModel.id = data.user?.uid;
+        userModel.messageToken = await FirebaseMessagingService().getFCMToken();
 
         try {
           final saveData = await authRepository.saveUserInfo(userModel: userModel);

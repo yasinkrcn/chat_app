@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/feature/message/data/datasources/message_remote_data_source.dart';
+import 'package:chat_app/feature/message/data/models/chat_model.dart';
 import 'package:chat_app/feature/message/domain/repositories/message_repo.dart';
 import 'package:dartz/dartz.dart';
 
@@ -50,13 +51,29 @@ class MessageRepositoryImpl implements MessageRepo {
   Future<Either<Failure, void>> sendTextMessage({
     required String message,
     required String chatRoomId,
-    required String receiverToken,
   }) async {
     try {
       var result = await messageRemoteDataSource.sendTextMessage(
         message: message,
         chatRoomId: chatRoomId,
-        receiverToken: receiverToken,
+      );
+
+      return Right(result);
+    } catch (failure) {
+      if (kDebugMode) {
+        print(failure);
+      }
+      return Left(ConnectionErrorFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ChatModel>>> fetchMessages(
+      {required String chatRoomId, required Timestamp? lastMessageTime}) async {
+    try {
+      var result = await messageRemoteDataSource.fetchMessages(
+        chatRoomId: chatRoomId,
+        lastMessageTime: lastMessageTime,
       );
 
       return Right(result);
