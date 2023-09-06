@@ -11,5 +11,10 @@ class AppConstants {
   //Tasarım yapılan cihazın ekran boyutları
   Size designDeviceSize = const Size(375, 812);
 
-  String appName = "chat_app";
+  String appName = "ChatApp";
+
+  String fcmUrl = "https://fcm.googleapis.com/fcm/send";
+
+  String firebaseKey =
+      "AAAAH0MlHrE:APA91bH-mqOZULWQ_VfzwTzeMObO5e-3FAW5bn_wTNbyn1GVqAy6XrTp_liWEntypNpSmgISGfkFpBOt-yvngO2q07zxK_35XiRm2j_rwIhAr48zFPlCYhItWfSHlXpeDNQ3iI8QqMh-";
 }

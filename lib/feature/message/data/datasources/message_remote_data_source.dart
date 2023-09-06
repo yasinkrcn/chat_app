@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/core/constants/app_constants.dart';
 import 'package:chat_app/feature/message/data/models/chat_model.dart';
+import 'package:dio/dio.dart';
 import 'package:uuid/uuid.dart';
 
 class MessageRemoteDataSource {
@@ -82,5 +85,48 @@ class MessageRemoteDataSource {
     List<ChatModel> chatMessages = value.docs.map((doc) => ChatModel.fromSnapshot(doc)).toList();
 
     return chatMessages;
+  }
+
+  Future<void> sendFirebaseNotification({
+    required String senderName,
+    required String message,
+    required String receiverToken,
+  }) async {
+    String url = AppConstants().fcmUrl;
+
+    Map<String, dynamic> data = {
+      "to": receiverToken,
+      "notification": {
+        "title": senderName,
+        "body": message,
+      },
+      "data": {
+        "key1": "value1",
+        "key2": "value2",
+      }
+    };
+
+    String firebaseKey = AppConstants().firebaseKey;
+    final dio = Dio();
+
+    final response = await dio.post(
+      url,
+      options: Options(
+        headers: <String, dynamic>{
+          "Authorization": "key=$firebaseKey",
+          "Content-Type": "application/json",
+        },
+      ),
+      data: json.encode(data),
+    );
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('Push notification sent successfully.');
+      }
+    } else {
+      if (kDebugMode) {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    }
   }
 }

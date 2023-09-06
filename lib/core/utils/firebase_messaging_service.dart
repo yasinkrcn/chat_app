@@ -14,14 +14,19 @@ class FirebaseMessagingService {
     // _messaging.subscribeToTopic('all');
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      NotificationService().showNotification(
+        title: message.notification?.title,
+        body: message.notification?.body,
+      );
       // Yeni bir bildirim geldiğinde burası çalışır
-      print('Yeni bildirim geldi: ${message.notification?.title}');
+      // print('Yeni bildirim geldi: ${message.notification?.title}');
+      // print('Yeni bildirim geldi: ${message.notification?.body}');
       // İsterseniz burada bildirimi işleyebilir veya görsel bir bildirim gösterebilirsiniz.
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // Bildirim ile uygulama açıldığında burası çalışır
-      print('Bildirim ile uygulama açıldı: ${message.notification?.title}');
+      // print('Bildirim ile uygulama açıldı: ${message.notification?.title}');
       // İsterseniz burada bildirimi işleyebilir veya belirli bir sayfaya yönlendirebilirsiniz.
     });
   }
@@ -30,13 +35,9 @@ class FirebaseMessagingService {
     String? token = await _messaging.getToken();
 
     if (kDebugMode) {
-      // print(token);
+      print(token);
     }
 
     return token;
   }
-
-  // void refreshFCMtoken() {
-  //   _messaging.onTokenRefresh;
-  // }
 }

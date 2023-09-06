@@ -67,12 +67,10 @@ class ChatViewModel extends ChangeNotifier {
     res.fold((failure) {
       showCustomMessenger(CustomMessengerState.ERROR, failure.message);
     }, (imageUrl) {
-      // sendPushNotification(
-      //   title: sl<LoginViewModel>().firestoreUser.name!,
-      //   body: messageController.text,
-      //   receiverToken: _messagePerson.messageToken!,
-      //   image: imageUrl,
-      // );
+      // sendFirebaseNotification(
+      //       senderName: _messagePerson.name!,
+      //       message: messageController.text,
+      //       receiverToken: _messagePerson.messageToken!);
     });
   }
 
@@ -215,55 +213,12 @@ class ChatViewModel extends ChangeNotifier {
     required String senderName,
     required String message,
     required String receiverToken,
-  }) {
-    Map<String, String> data = {
-      "title": senderName,
-      "body": message,
-    };
+  }) async {
+    final res = await messageRepo.sendFirebaseNotification(
+        senderName: senderName, message: message, receiverToken: receiverToken);
 
-    FirebaseMessaging.instance.sendMessage(
-      to: receiverToken,
-      data: data,
-    );
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.WARNING, failure.message);
+    }, (data) {});
   }
-
-  // void sendPushNotification({
-  //   required String title,
-  //   String? body,
-  //   String? image,
-  //   required String receiverToken,
-  // }) async {
-  //   const url = "https://onesignal.com/api/v1/notifications";
-
-  //   /// kRestApiKey is your OneSignal REST API key
-  //   const restApiKey = "NjVjN2EwYzYtZjE1MS00YzBiLWI2Y2ItZmQxYTg2ZTNjM2Rh";
-  //   const oneSignalAppID = "370ec5f1-4889-427e-b1aa-e14a753b72ee";
-  //   final dio = Dio();
-  //   try {
-  //     final response = await dio.post(
-  //       url,
-  //       options: Options(
-  //         headers: <String, String>{
-  //           "Authorization": "Basic $restApiKey",
-  //           "Content-Type": "application/json",
-  //         },
-  //       ),
-  //       data: jsonEncode({
-  //         "app_id": oneSignalAppID,
-  //         "include_player_ids": [receiverToken],
-  //         "headings": {"en": title},
-  //         "contents": {"en": body == "" ? "." : body},
-  //         "large_icon": image,
-  //       }),
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       print('Push notification sent successfully.');
-  //     } else {
-  //       print('Request failed with status: ${response.statusCode}.');
-  //     }
-  //   } catch (e) {
-  //     print('Error occurred: $e');
-  //   }
-  // }
 }

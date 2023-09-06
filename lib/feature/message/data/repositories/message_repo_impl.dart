@@ -84,4 +84,26 @@ class MessageRepositoryImpl implements MessageRepo {
       return Left(ConnectionErrorFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, void>> sendFirebaseNotification({
+    required String senderName,
+    required String message,
+    required String receiverToken,
+  }) async {
+    try {
+      await messageRemoteDataSource.sendFirebaseNotification(
+        senderName: senderName,
+        message: message,
+        receiverToken: receiverToken,
+      );
+
+      return const Right(null);
+    } catch (failure) {
+      if (kDebugMode) {
+        print(failure);
+      }
+      return Left(PushNotificationError());
+    }
+  }
 }

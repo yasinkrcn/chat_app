@@ -14,6 +14,7 @@ export 'package:chat_app/core/constants/theme/app_text_styles.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:chat_app/core/shared_widgets/app_error_widget.dart';
 export 'package:chat_app/core/shared_widgets/app_loading_widget.dart';
+export 'package:chat_app/core/utils/ui_state.dart';
 export 'package:chat_app/core/extensions/num_extension.dart';
 export 'package:chat_app/core/functions/show_custom_messenger.dart';
 export 'package:chat_app/core/utils/local_data_source/shared_preferences/domain/entities/shared_preferences_key_with_value_params.dart';
@@ -56,3 +57,6 @@ export 'package:chat_app/feature/auth/presentation/view_model/verify_email_view_
 export 'package:chat_app/core/constants/firebase_instance.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:chat_app/core/utils/firebase_messaging_service.dart';
+export 'package:flutter_local_notifications/flutter_local_notifications.dart';
+export 'package:chat_app/core/utils/notification_service.dart';
+export 'package:permission_handler/permission_handler.dart';

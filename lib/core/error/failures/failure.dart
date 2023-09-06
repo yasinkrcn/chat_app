@@ -31,3 +31,7 @@ class UserDeleteFailure extends Failure {
 class UserLogOutFailure extends Failure {
   UserLogOutFailure() : super("Kullanıcı Çıkış yaparken sorun oluştu.");
 }
+
+class PushNotificationError extends Failure {
+  PushNotificationError() : super("Bildirim gönderilirken bir sorun oluştu.");
+}

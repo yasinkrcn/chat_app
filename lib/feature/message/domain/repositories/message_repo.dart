@@ -22,4 +22,10 @@ abstract class MessageRepo {
     required String chatRoomId,
     required Timestamp? lastMessageTime,
   });
+
+  Future<Either<Failure, void>> sendFirebaseNotification({
+    required String senderName,
+    required String message,
+    required String receiverToken,
+  });
 }
