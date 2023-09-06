@@ -89,8 +89,9 @@ class MessageRemoteDataSource {
 
   Future<void> sendFirebaseNotification({
     required String senderName,
-    required String message,
+    String? message,
     required String receiverToken,
+    String? imageUrl,
   }) async {
     String url = AppConstants().fcmUrl;
 
@@ -101,7 +102,7 @@ class MessageRemoteDataSource {
         "body": message,
       },
       "data": {
-        "key1": "value1",
+        "image": imageUrl,
         "key2": "value2",
       }
     };

@@ -3,12 +3,10 @@ import 'package:chat_app/core/constants/app_constants.dart';
 import 'package:chat_app/core/constants/main_provider_list.dart';
 import 'package:chat_app/core/constants/theme/app_theme.dart';
 import 'package:chat_app/core/init/injection_container.dart' as locator;
-import 'package:chat_app/core/utils/firebase_messaging_service.dart';
+import 'package:chat_app/core/utils/awesome_notification_manager.dart';
 import 'package:chat_app/core/utils/permission_manager.dart';
-
 import 'package:chat_app/feature/auth/presentation/view/pages/login_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/splash_page.dart';
-
 import 'package:chat_app/firebase_options.dart';
 
 void main() async {
@@ -22,7 +20,7 @@ void main() async {
 
   FirebaseMessagingService().initialize();
 
-  NotificationService().initNotification();
+  NotificationManager().init();
 
   await PermissionManager().notificationPermission();
 

@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/core/utils/awesome_notification_manager.dart';
 
 class FirebaseMessagingService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -13,11 +14,19 @@ class FirebaseMessagingService {
   void listenMessages() {
     // _messaging.subscribeToTopic('all');
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      NotificationService().showNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // print(message.data["image"]);
+
+      NotificationManager().showBasicNotification(
+        title: message.notification!.title!,
+        body: "body",
+        image: message.data["image"],
       );
+      // await NotificationService().showNotification(
+      //   title: message.notification?.title,
+      //   body: message.notification?.body,
+      //   imageUrl: message.data["image"],
+      // );
       // Yeni bir bildirim geldiğinde burası çalışır
       // print('Yeni bildirim geldi: ${message.notification?.title}');
       // print('Yeni bildirim geldi: ${message.notification?.body}');

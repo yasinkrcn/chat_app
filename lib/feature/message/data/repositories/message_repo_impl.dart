@@ -88,14 +88,16 @@ class MessageRepositoryImpl implements MessageRepo {
   @override
   Future<Either<Failure, void>> sendFirebaseNotification({
     required String senderName,
-    required String message,
+    String? message,
     required String receiverToken,
+    String? imageUrl,
   }) async {
     try {
       await messageRemoteDataSource.sendFirebaseNotification(
         senderName: senderName,
         message: message,
         receiverToken: receiverToken,
+        imageUrl: imageUrl,
       );
 
       return const Right(null);

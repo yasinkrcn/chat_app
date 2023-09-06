@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:chat_app/core/_core_exports.dart';
 import 'package:chat_app/feature/message/data/models/chat_model.dart';
-import 'package:dio/dio.dart';
 
 class ChatViewModel extends ChangeNotifier {
   final MessageRepo messageRepo;
@@ -211,11 +209,16 @@ class ChatViewModel extends ChangeNotifier {
 
   void sendFirebaseNotification({
     required String senderName,
-    required String message,
+    String? message,
     required String receiverToken,
+    String? imageUrl,
   }) async {
     final res = await messageRepo.sendFirebaseNotification(
-        senderName: senderName, message: message, receiverToken: receiverToken);
+      imageUrl: imageUrl,
+      senderName: senderName,
+      message: message,
+      receiverToken: receiverToken,
+    );
 
     res.fold((failure) {
       showCustomMessenger(CustomMessengerState.WARNING, failure.message);

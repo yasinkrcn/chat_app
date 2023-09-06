@@ -25,7 +25,8 @@ abstract class MessageRepo {
 
   Future<Either<Failure, void>> sendFirebaseNotification({
     required String senderName,
-    required String message,
+    String? message,
     required String receiverToken,
+    String? imageUrl,
   });
 }
