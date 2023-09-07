@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_app/core/error/firebase_exceptions/firebase_exceptions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:chat_app/core/_core_exports.dart';
@@ -28,7 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserModel>> getUsers({required String userId}) async {
+  Future<Either<Failure, UserModel>> getUserInfo({required String userId}) async {
     try {
       final result = await remoteDataSource.getUserInfo(userId: userId);
 
@@ -106,6 +108,20 @@ class AuthRepositoryImpl implements AuthRepository {
       await remoteDataSource.sendEmailVerificationCode();
 
       return const Right(null);
+    } catch (failure) {
+      if (kDebugMode) {
+        print(failure);
+      }
+      return Left(ConnectionErrorFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getImageUrlFromFirebase({required File imageFile}) async {
+    try {
+      var res = await remoteDataSource.getImageUrlFromFirebase(imageFile: imageFile);
+
+      return Right(res);
     } catch (failure) {
       if (kDebugMode) {
         print(failure);

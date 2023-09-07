@@ -1,6 +1,7 @@
 import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 import 'package:chat_app/feature/message/presentation/view_model/message_view_model.dart';
 import 'package:provider/single_child_widget.dart';
+import '../../feature/settings/presentation/view_model/settings_view_model.dart';
 import '../_core_exports.dart';
 
 class MainProviderList {
@@ -12,6 +13,7 @@ class MainProviderList {
     ChangeNotifierProvider(create: (_) => sl<MessageViewModel>()),
     ChangeNotifierProvider(create: (_) => sl<ChatViewModel>()),
     ChangeNotifierProvider(create: (_) => sl<BottomNavBarViewModel>()),
+    ChangeNotifierProvider(create: (_) => sl<SettingsViewModel>()),
   ];
 
   /// This method returns the provider list that should stand up at the beginning of the application.

@@ -6,6 +6,10 @@ import 'package:chat_app/feature/message/data/datasources/message_remote_data_so
 import 'package:chat_app/feature/message/data/repositories/message_repo_impl.dart';
 import 'package:chat_app/feature/message/presentation/view_model/chat_view_model.dart';
 import 'package:chat_app/feature/message/presentation/view_model/message_view_model.dart';
+import 'package:chat_app/feature/settings/data/datasources/settings_remote_data_source.dart';
+import 'package:chat_app/feature/settings/data/repositories/settings_repo_impl.dart';
+import 'package:chat_app/feature/settings/domain/repositories/settings_repo.dart';
+import 'package:chat_app/feature/settings/presentation/view_model/settings_view_model.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:chat_app/core/_core_exports.dart';
@@ -23,7 +27,27 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RemoveDataFromKey(sl()));
   sl.registerLazySingleton(() => SaveDataFromKey(sl()));
 
-  // sl.registerLazySingleton(() => UserModel());
+  sl.registerSingletonAsync<UserModel>(
+    () async {
+      final authRepository = sl<AuthRepository>();
+
+      UserModel user = UserModel();
+
+      bool isUserActive = FirebaseAuth.instance.currentUser?.uid != null;
+
+      if (isUserActive) {
+        var res = await authRepository.getUserInfo(userId: FirebaseAuth.instance.currentUser!.uid);
+
+        res.fold((failure) {
+          user;
+        }, (data) {
+          user = data;
+        });
+      }
+
+      return user;
+    },
+  );
 
   // sl.registerSingletonAsync<UserModel>(
   //   () async {
@@ -64,4 +88,12 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => MessageViewModel(messageRepo: sl()));
   sl.registerLazySingleton(() => ChatViewModel(messageRepo: sl()));
+
+  //* Settings
+
+  sl.registerLazySingleton(() => SettingsRemoteDataSource());
+
+  sl.registerLazySingleton<SettingsRepo>(() => SettingsRepoImpl(sl()));
+
+  sl.registerLazySingleton(() => SettingsViewModel());
 }

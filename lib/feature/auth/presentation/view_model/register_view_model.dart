@@ -36,65 +36,54 @@ class RegisterViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getImageUrlFromFirebase() async {
-    String fileName = const Uuid().v1();
+  Future<String> getImageUrlFromFirebase({required imageFile}) async {
+    late String imageUrl;
+    var res = await authRepository.getImageUrlFromFirebase(imageFile: imageFile!);
 
-    var ref = FirebaseStorage.instance.ref().child('userImages').child("$fileName.jpg");
+    res.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (data) {
+      imageUrl = data;
+    });
 
-    TaskSnapshot uploadTask = await ref.putFile(imageFile!);
-
-    String imageUrl = await uploadTask.ref.getDownloadURL();
-
-    userModel.userImage = imageUrl;
+    return imageUrl;
   }
 
   Future<void> register() async {
-    await getImageUrlFromFirebase();
+    final data = await authRepository.createUserWithEmailAndPassword(
+      email: emailController.text,
+      password: passwordController.text,
+    );
 
-    try {
-      final data = await authRepository.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+    data.fold((failure) {
+      showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+    }, (data) async {
+      userModel.userImage = await getImageUrlFromFirebase(imageFile: imageFile);
+      userModel.email = emailController.text;
+      userModel.name = nameController.text;
+      userModel.number = phoneNumberController.text;
+      userModel.id = data.user?.uid;
+      userModel.messageToken = await FirebaseMessagingService().getFCMToken();
 
-      data.fold((failure) {
-        showCustomMessenger(CustomMessengerState.ERROR, failure.message);
-      }, (data) async {
-        userModel.email = emailController.text;
-        userModel.name = nameController.text;
-        userModel.number = phoneNumberController.text;
-        userModel.id = data.user?.uid;
-        userModel.messageToken = await FirebaseMessagingService().getFCMToken();
+      try {
+        final saveData = await authRepository.saveUserInfo(userModel: userModel);
 
-        try {
-          final saveData = await authRepository.saveUserInfo(userModel: userModel);
+        saveData.fold((failure) {
+          showCustomMessenger(CustomMessengerState.ERROR, failure.message);
+        }, (result) {
+          saveDataFromKey(
+            SharedPreferenceKeyWithValueParams(
+              key: SharedPreferencesKeys.CACHE_USER_INFO,
+              value: userModel.toJson(),
+            ),
+          );
 
-          saveData.fold((failure) {
-            showCustomMessenger(CustomMessengerState.ERROR, failure.message);
-          }, (result) {
-            saveDataFromKey(
-              SharedPreferenceKeyWithValueParams(
-                key: SharedPreferencesKeys.CACHE_USER_INFO,
-                value: userModel.toJson(),
-              ),
-            );
+          // clearController();
 
-            // clearController();
-
-            Go.to.page(PageRoutes.verifyEmailPage);
-          });
-        } catch (_) {}
-      });
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "invalid-email":
-          return showCustomMessenger(CustomMessengerState.ERROR, "Mail adresiniz hatalıdır.");
-        case "email-already-in-use":
-          return showCustomMessenger(CustomMessengerState.ERROR, "Mail adresi kullanılmaktadır.");
-        case "weak-password":
-          return showCustomMessenger(CustomMessengerState.ERROR, "Minimum 6 haneli bir şifre giriniz.");
-      }
-    }
+          Go.to.page(PageRoutes.verifyEmailPage);
+        });
+      } catch (_) {}
+    });
   }
 
   String? getUserFirebaseId() {

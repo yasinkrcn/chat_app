@@ -46,7 +46,7 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.appThemeData,
       onGenerateRoute: generateRoute,
       navigatorKey: GlobalContextKey.instance.globalKey,
-      home: BottomNavigationPage(),
+      home: SplashPage(),
     );
   }
 }

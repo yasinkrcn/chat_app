@@ -44,7 +44,7 @@ class FirebaseMessagingService {
     String? token = await _messaging.getToken();
 
     if (kDebugMode) {
-      print(token);
+      // print(token);
     }
 
     return token;

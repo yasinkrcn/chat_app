@@ -53,4 +53,13 @@ class UserModel {
         UserDKS.email: email,
         UserDKS.messageToken: messageToken ?? "",
       };
+
+  void assignData(UserModel other) {
+    id = other.id;
+    userImage = other.userImage;
+    name = other.name;
+    number = other.number;
+    email = other.email;
+    messageToken = other.messageToken;
+  }
 }

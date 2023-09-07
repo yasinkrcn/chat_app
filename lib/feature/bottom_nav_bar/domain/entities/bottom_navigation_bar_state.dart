@@ -84,7 +84,7 @@ extension BottomNavigationBarStateExtension on BottomNavigationBarState {
       case BottomNavigationBarState.MESSAGE:
         return const MessagePage();
       case BottomNavigationBarState.SETTINGS:
-        return const SettingsPage();
+        return SettingsPage();
     }
   }
 

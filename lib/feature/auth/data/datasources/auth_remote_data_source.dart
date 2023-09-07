@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthRemoteDataSource {
   Future<UserCredential> createUserWithEmailAndPassword({required String email, required String password}) async {
@@ -46,5 +49,17 @@ class AuthRemoteDataSource {
 
   Future<void> sendEmailVerificationCode() async {
     await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+  }
+
+  Future<String> getImageUrlFromFirebase({required File imageFile}) async {
+    String fileName = const Uuid().v1();
+
+    var ref = FirebaseStorage.instance.ref().child('userImages').child("$fileName.jpg");
+
+    TaskSnapshot uploadTask = await ref.putFile(imageFile);
+
+    String imageUrl = await uploadTask.ref.getDownloadURL();
+
+    return imageUrl;
   }
 }

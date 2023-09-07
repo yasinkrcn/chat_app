@@ -9,51 +9,49 @@ class MessagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: AppScaffold(
-        appBar: const CommonAppBar(title: "Mesajlar"),
-        body: Consumer(
-          builder: (context, MessageViewModel messageViewModel, child) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0) - const EdgeInsets.only(bottom: 16),
-                    child: AppTextFormField.standart(
-                      hintText: "Ara",
-                      suffixIcon: const Icon(Icons.search_rounded),
-                    ),
+    return AppScaffold(
+      appBar: const CommonAppBar(title: "Mesajlar"),
+      body: Consumer(
+        builder: (context, MessageViewModel messageViewModel, child) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0) - const EdgeInsets.only(bottom: 16),
+                  child: AppTextFormField.standart(
+                    hintText: "Ara",
+                    suffixIcon: const Icon(Icons.search_rounded),
                   ),
-                  AppWidgetBuilderByState(
-                    response: messageViewModel.chatUserList,
-                    builder: (chatUserList) {
-                      return ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: chatUserList.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              //TODO:
+                ),
+                AppWidgetBuilderByState(
+                  response: messageViewModel.chatUserList,
+                  builder: (chatUserList) {
+                    return ListView.builder(
+                      physics: const ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: chatUserList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            //TODO:
 
-                              sl<ChatViewModel>().startMessage(
-                                targetUser: chatUserList[index],
-                              );
-                            },
-                            child: MessageCardWidget(
-                              imageUrl: chatUserList[index].userImage!,
-                              username: chatUserList[index].name!,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+                            sl<ChatViewModel>().startMessage(
+                              targetUser: chatUserList[index],
+                            );
+                          },
+                          child: MessageCardWidget(
+                            imageUrl: chatUserList[index].userImage!,
+                            username: chatUserList[index].name!,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

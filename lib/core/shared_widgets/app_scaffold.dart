@@ -14,7 +14,7 @@ class AppScaffold extends StatelessWidget {
   const AppScaffold({
     Key? key,
     this.appBar,
-    this.backgroundColor,
+    this.backgroundColor = Colors.white,
     this.body,
     this.bottomNavigationBar,
     this.floatingActionButton,
@@ -25,16 +25,22 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Padding(
+      child: Container(
+        color: backgroundColor,
         padding: EdgeInsets.only(
-          top: MediaQuery.of(context).viewPadding.top,
-          bottom: MediaQuery.of(context).viewPadding.bottom,
+          bottom: ScreenSize().bottomMargin,
         ),
         child: Scaffold(
           backgroundColor: backgroundColor,
-          appBar: appBar,
+          appBar: appBar ??
+              AppBar(
+                toolbarHeight: 0,
+                backgroundColor: backgroundColor,
+                elevation: 0,
+              ),
           body: body,
           drawer: drawer,
           bottomNavigationBar: bottomNavigationBar,

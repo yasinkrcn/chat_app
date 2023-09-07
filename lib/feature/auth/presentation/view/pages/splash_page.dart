@@ -15,12 +15,12 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     super.initState();
 
     Timer(
-      const Duration(seconds: 0),
+      const Duration(seconds: 3),
       () {
         if (FirebaseAuth.instance.currentUser != null) {
-          Go.to.page(PageRoutes.messagePage);
+          Go.to.pageAndRemoveUntil(PageRoutes.bottomNavigationPage);
         } else {
-          Go.to.page(PageRoutes.loginPage);
+          Go.to.pageAndRemoveUntil(PageRoutes.loginPage);
         }
       },
     );

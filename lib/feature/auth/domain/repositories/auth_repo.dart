@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:chat_app/core/_core_exports.dart';
 
@@ -11,11 +13,13 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> signOut();
 
-  Future<Either<Failure, UserModel>> getUsers({required String userId});
+  Future<Either<Failure, UserModel>> getUserInfo({required String userId});
 
   Future<Either<Failure, void>> userDelete({
     required String userId,
   });
 
   Future<Either<Failure, void>> sendEmailVerificationCode();
+
+  Future<Either<Failure, String>> getImageUrlFromFirebase({required File imageFile});
 }

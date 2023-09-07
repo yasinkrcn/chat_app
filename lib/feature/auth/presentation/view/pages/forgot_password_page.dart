@@ -6,9 +6,10 @@ class ForgotPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: const Text("Şifremi Unuttum"), backgroundColor: Colors.white),
+    return AppScaffold(
+      appBar: const CommonAppBar(
+        title: "Şifremi Unuttum",
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

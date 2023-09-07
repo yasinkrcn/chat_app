@@ -1,5 +1,4 @@
 import 'package:chat_app/core/_core_exports.dart';
-import 'package:chat_app/feature/auth/presentation/view_model/login_view_model.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -8,10 +7,10 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenSize.init(context);
     return AppScaffold(
-      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          AppText("data"),
           SizedBox.shrink(),
           // Expanded(child: Lottie.asset(AssetPaths().auth)),
           ShadowContainer(child: Consumer(
@@ -84,8 +83,7 @@ class LoginPage extends StatelessWidget {
                         },
                         child: const Text(
                           'Kayıt Ol',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500, color: Color.fromARGB(255, 255, 95, 2)),
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.orange),
                         ),
                       ),
                     ],
