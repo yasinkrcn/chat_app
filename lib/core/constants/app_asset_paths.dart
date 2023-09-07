@@ -15,6 +15,9 @@ class AssetPaths {
   //*SVG
 
   //*PNG
+  String get home => _toPNG("home");
+  String get message => _toPNG("message");
+  String get settings => _toPNG("settings");
 
   //*JSON
   String get forgotPassword => _toLOTTIE("forgot_password");

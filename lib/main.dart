@@ -7,6 +7,7 @@ import 'package:chat_app/core/utils/awesome_notification_manager.dart';
 import 'package:chat_app/core/utils/permission_manager.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/login_page.dart';
 import 'package:chat_app/feature/auth/presentation/view/pages/splash_page.dart';
+import 'package:chat_app/feature/bottom_nav_bar/view/pages/bottom_navigation_page.dart';
 import 'package:chat_app/firebase_options.dart';
 
 void main() async {
@@ -45,7 +46,7 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.appThemeData,
       onGenerateRoute: generateRoute,
       navigatorKey: GlobalContextKey.instance.globalKey,
-      home: LoginPage(),
+      home: BottomNavigationPage(),
     );
   }
 }

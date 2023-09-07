@@ -61,3 +61,4 @@ export 'package:chat_app/core/utils/firebase_messaging_service.dart';
 export 'package:awesome_notifications/awesome_notifications.dart';
 export 'package:chat_app/core/utils/notification_service.dart';
 export 'package:permission_handler/permission_handler.dart';
+export 'package:chat_app/feature/bottom_nav_bar/view_model/bottom_navigation_bar_view_model.dart';

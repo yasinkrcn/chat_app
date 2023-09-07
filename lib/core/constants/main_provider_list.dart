@@ -11,6 +11,7 @@ class MainProviderList {
     ChangeNotifierProvider(create: (_) => sl<VerifyEmailViewModel>()),
     ChangeNotifierProvider(create: (_) => sl<MessageViewModel>()),
     ChangeNotifierProvider(create: (_) => sl<ChatViewModel>()),
+    ChangeNotifierProvider(create: (_) => sl<BottomNavBarViewModel>()),
   ];
 
   /// This method returns the provider list that should stand up at the beginning of the application.

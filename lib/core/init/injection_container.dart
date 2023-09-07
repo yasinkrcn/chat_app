@@ -53,6 +53,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RegisterViewModel());
   sl.registerLazySingleton(() => VerifyEmailViewModel());
 
+  //* Bottom Navigation Bar
+  sl.registerLazySingleton(() => BottomNavBarViewModel());
+
   // //* Message
 
   sl.registerLazySingleton(() => MessageRemoteDataSource());
