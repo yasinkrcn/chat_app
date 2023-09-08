@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat_app/feature/auth/data/repositories/auth_repo_impl.dart';
+import 'package:chat_app/feature/home/presentation/view_model/home_view_model.dart';
 
 import 'package:chat_app/feature/message/data/datasources/message_remote_data_source.dart';
 import 'package:chat_app/feature/message/data/repositories/message_repo_impl.dart';
@@ -10,6 +11,7 @@ import 'package:chat_app/feature/settings/data/datasources/settings_remote_data_
 import 'package:chat_app/feature/settings/data/repositories/settings_repo_impl.dart';
 import 'package:chat_app/feature/settings/domain/repositories/settings_repo.dart';
 import 'package:chat_app/feature/settings/presentation/view_model/settings_view_model.dart';
+import 'package:chat_app/feature/story/presentation/view_model/story_view_model.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:chat_app/core/_core_exports.dart';
@@ -80,6 +82,10 @@ Future<void> init() async {
   //* Bottom Navigation Bar
   sl.registerLazySingleton(() => BottomNavBarViewModel());
 
+  //* Home
+
+  sl.registerLazySingleton(() => HomeViewModel());
+
   // //* Message
 
   sl.registerLazySingleton(() => MessageRemoteDataSource());
@@ -96,4 +102,8 @@ Future<void> init() async {
   sl.registerLazySingleton<SettingsRepo>(() => SettingsRepoImpl(sl()));
 
   sl.registerLazySingleton(() => SettingsViewModel());
+
+  //* Stories
+
+  sl.registerLazySingleton(() => StoryViewModel());
 }

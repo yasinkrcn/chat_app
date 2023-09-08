@@ -84,18 +84,18 @@ extension BottomNavigationBarStateExtension on BottomNavigationBarState {
       case BottomNavigationBarState.MESSAGE:
         return const MessagePage();
       case BottomNavigationBarState.SETTINGS:
-        return SettingsPage();
+        return const SettingsPage();
     }
   }
 
   Color pageBackGroundColor() {
     switch (this) {
       case BottomNavigationBarState.HOME:
-        return Colors.blue;
+        return AppColors.orange;
       case BottomNavigationBarState.MESSAGE:
-        return Colors.blue;
+        return AppColors.red;
       case BottomNavigationBarState.SETTINGS:
-        return Colors.blue;
+        return AppColors.green;
     }
   }
 }

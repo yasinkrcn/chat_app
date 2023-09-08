@@ -1,4 +1,0 @@
-
-
-// class ExampleViewModel extends ChangeNotifier {
-// }

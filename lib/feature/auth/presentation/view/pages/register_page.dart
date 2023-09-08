@@ -11,8 +11,7 @@ class RegisterPage extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox.shrink(),
-            // Expanded(child: Lottie.asset(AssetPaths().auth)),
+            Expanded(child: Lottie.asset(AssetPaths().register)),
             ShadowContainer(
               child: Consumer(builder: (context, RegisterViewModel registerViewModel, child) {
                 return Column(

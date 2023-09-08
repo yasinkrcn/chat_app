@@ -10,9 +10,7 @@ class LoginPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          AppText("data"),
-          SizedBox.shrink(),
-          // Expanded(child: Lottie.asset(AssetPaths().auth)),
+          Expanded(child: Lottie.asset(AssetPaths().login)),
           ShadowContainer(child: Consumer(
             builder: (context, LoginViewModel loginController, child) {
               return Column(

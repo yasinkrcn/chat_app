@@ -10,26 +10,8 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: CommonAppBar(
-          title: "Ayarlar",
-          actions: GestureDetector(
-            onTap: () {
-              showModalBottomSheet<void>(
-                context: context,
-                builder: (BuildContext context) {
-                  return const LogOutBottomSheet();
-                },
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.exit_to_app_rounded,
-              size: 36,
-            ),
-          )),
+        title: "Ayarlar",
+      ),
       body: SingleChildScrollView(
         child: Consumer(
           builder: (context, LoginViewModel viewModel, child) {
@@ -49,6 +31,30 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   text: "Profil Ayarları",
                   onTap: () => Go.to.page(PageRoutes.profileSettingsPage),
+                ),
+
+                SettingsItem(
+                  text: "Sorun Bildirin",
+                  // onTap: () => Go.to.page(PageRoutes.profileSettingsPage),
+                ),
+                SettingsItem(
+                  text: "Gizlilik Politikası",
+                  // onTap: () => Go.to.page(PageRoutes.profileSettingsPage),
+                ),
+                SettingsItem(
+                  text: "Çıkış Yap",
+                  color: Colors.red,
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const LogOutBottomSheet();
+                    },
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                  ),
                 ),
                 // AppButton.standart(
                 //     onTap: () {

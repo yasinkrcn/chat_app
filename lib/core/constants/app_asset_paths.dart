@@ -21,7 +21,8 @@ class AssetPaths {
 
   //*JSON
   String get forgotPassword => _toLOTTIE("forgot_password");
-  String get auth => _toLOTTIE("auth");
+  String get login => _toLOTTIE("login");
+  String get register => _toLOTTIE("register");
 
   //*GIF
 }

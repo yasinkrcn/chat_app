@@ -13,8 +13,7 @@ class ForgotPasswordPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox.shrink(),
-          // Expanded(child: Lottie.asset(AssetPaths().forgotPassword)),
+          Expanded(child: Lottie.asset(AssetPaths().forgotPassword)),
           ShadowContainer(child: Consumer(
             builder: (context, LoginViewModel prov, child) {
               return Column(

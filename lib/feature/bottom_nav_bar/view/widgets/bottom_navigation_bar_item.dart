@@ -35,7 +35,7 @@ class CustomBottomNavigationBarItem extends StatelessWidget {
               Image.asset(
                 barState.stateToAssetPath(),
                 height: barState.stateToAssetPathSize(),
-                color: isActive ? Colors.white : Colors.black,
+                color: isActive ? Colors.white : Colors.black54,
               ),
               if (isActive) ...[
                 AppText(
