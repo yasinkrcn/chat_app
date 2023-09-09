@@ -35,11 +35,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 102,
-            width: 102,
-            color: Colors.redAccent,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenSize().getWidthPercent(.2)),
+            child: Image.asset(AssetPaths().appIcon),
           ),
+          AppSizedBox.h(96.h),
           const Center(
             child: CircularProgressIndicator.adaptive(),
           ),

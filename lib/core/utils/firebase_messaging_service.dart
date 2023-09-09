@@ -19,7 +19,7 @@ class FirebaseMessagingService {
 
       NotificationManager().showBasicNotification(
         title: message.notification!.title!,
-        body: "body",
+        body: message.notification!.body!,
         image: message.data["image"],
       );
       // await NotificationService().showNotification(

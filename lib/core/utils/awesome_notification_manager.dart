@@ -20,16 +20,16 @@ class NotificationManager {
 
   void showBasicNotification({required String title, required String body, String? image}) {
     AwesomeNotifications().createNotification(
-      actionButtons: [
-        NotificationActionButton(
-          key: 'ACTION_YES',
-          label: 'Yes',
-        ),
-        NotificationActionButton(
-          key: 'ACTION_NO',
-          label: 'No',
-        ),
-      ],
+      // actionButtons: [
+      //   NotificationActionButton(
+      //     key: 'ACTION_YES',
+      //     label: 'Yes',
+      //   ),
+      //   NotificationActionButton(
+      //     key: 'ACTION_NO',
+      //     label: 'No',
+      //   ),
+      // ],
       content: NotificationContent(
         id: 0,
         channelKey: 'basic_channel',

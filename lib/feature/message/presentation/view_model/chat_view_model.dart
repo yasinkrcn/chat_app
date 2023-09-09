@@ -215,7 +215,7 @@ class ChatViewModel extends ChangeNotifier {
   }) async {
     final res = await messageRepo.sendFirebaseNotification(
       imageUrl: imageUrl,
-      senderName: senderName,
+      senderName: sl<UserModel>().name!,
       message: message,
       receiverToken: receiverToken,
     );

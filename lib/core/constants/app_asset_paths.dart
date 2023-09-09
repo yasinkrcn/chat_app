@@ -25,4 +25,6 @@ class AssetPaths {
   String get register => _toLOTTIE("register");
 
   //*GIF
+
+  String appIcon = "assets/app_icon/app_icon.png";
 }
