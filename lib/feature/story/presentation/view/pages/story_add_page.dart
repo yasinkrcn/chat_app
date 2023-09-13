@@ -9,8 +9,8 @@ class StoryAddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: Consumer(
-        builder: (context, StoryViewModel storyViewModel, child) {
+      body: Consumer<StoryViewModel>(
+        builder: (context, storyViewModel, _) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -26,7 +26,11 @@ class StoryAddPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: AppButton.standart(onTap: () {}, buttonText: "Devam Et"),
+                child: AppButton.standart(
+                    onTap: () {
+                      storyViewModel.ddddd();
+                    },
+                    buttonText: "Devam Et"),
               )
             ],
           );

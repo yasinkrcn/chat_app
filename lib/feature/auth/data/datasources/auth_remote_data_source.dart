@@ -51,10 +51,13 @@ class AuthRemoteDataSource {
     await FirebaseAuth.instance.currentUser?.sendEmailVerification();
   }
 
-  Future<String> getImageUrlFromFirebase({required File imageFile}) async {
+  Future<String> getImageUrlFromFirebase({
+    required File imageFile,
+    String? imageLocation,
+  }) async {
     String fileName = const Uuid().v1();
 
-    var ref = FirebaseStorage.instance.ref().child('userImages').child("$fileName.jpg");
+    var ref = FirebaseStorage.instance.ref().child(imageLocation ?? 'userImages').child("$fileName.jpg");
 
     TaskSnapshot uploadTask = await ref.putFile(imageFile);
 

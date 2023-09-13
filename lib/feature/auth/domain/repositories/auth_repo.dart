@@ -21,5 +21,8 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> sendEmailVerificationCode();
 
-  Future<Either<Failure, String>> getImageUrlFromFirebase({required File imageFile});
+  Future<Either<Failure, String>> getImageUrlFromFirebase({
+    required File imageFile,
+    String? imageLocation,
+  });
 }

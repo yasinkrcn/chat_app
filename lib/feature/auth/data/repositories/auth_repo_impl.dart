@@ -117,9 +117,15 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getImageUrlFromFirebase({required File imageFile}) async {
+  Future<Either<Failure, String>> getImageUrlFromFirebase({
+    required File imageFile,
+    String? imageLocation,
+  }) async {
     try {
-      var res = await remoteDataSource.getImageUrlFromFirebase(imageFile: imageFile);
+      var res = await remoteDataSource.getImageUrlFromFirebase(
+        imageFile: imageFile,
+        imageLocation: imageLocation,
+      );
 
       return Right(res);
     } catch (failure) {

@@ -11,6 +11,9 @@ import 'package:chat_app/feature/settings/data/datasources/settings_remote_data_
 import 'package:chat_app/feature/settings/data/repositories/settings_repo_impl.dart';
 import 'package:chat_app/feature/settings/domain/repositories/settings_repo.dart';
 import 'package:chat_app/feature/settings/presentation/view_model/settings_view_model.dart';
+import 'package:chat_app/feature/story/data/datasources/story_remote_data_source.dart';
+import 'package:chat_app/feature/story/data/repositories/story_repo_impl.dart';
+import 'package:chat_app/feature/story/domain/repositories/story_repo.dart';
 import 'package:chat_app/feature/story/presentation/view_model/story_view_model.dart';
 import 'package:get_it/get_it.dart';
 
@@ -104,6 +107,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SettingsViewModel());
 
   //* Stories
+  sl.registerLazySingleton(() => StoryRemoteDataSource());
+
+  sl.registerLazySingleton<StoryRepository>(() => StoryRepositoryImpl(sl()));
 
   sl.registerLazySingleton(() => StoryViewModel());
 }

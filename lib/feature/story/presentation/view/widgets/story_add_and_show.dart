@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/core/_core_exports.dart';
+import 'package:chat_app/feature/story/presentation/view_model/story_view_model.dart';
 
 class StoryAddAndShow extends StatefulWidget {
   File? imageFile;
@@ -22,6 +23,9 @@ class _StoryAddAndShowState extends State<StoryAddAndShow> {
       if (xFile != null) {
         setState(() {
           widget.imageFile = File(xFile.path);
+
+          print(widget.imageFile?.path);
+          print(sl<StoryViewModel>().imageFile?.path);
         });
       }
     });
